@@ -12,6 +12,8 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "axios": "^1.9.0",
     "core-js": "^3.8.3",
+    "highcharts": "^12.2.0",
+    "highcharts-vue": "^2.0.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"

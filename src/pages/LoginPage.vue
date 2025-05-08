@@ -14,7 +14,7 @@ export default defineComponent({
   name: 'HomeView',
   components: {
     LoginForm
-  },
+  }
 });
 </script>
 

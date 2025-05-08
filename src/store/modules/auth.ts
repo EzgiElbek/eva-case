@@ -3,6 +3,7 @@ import { ActionContext } from 'vuex';
 
 interface AuthState {
   accessToken: string;
+  email: string;
 }
 
 interface LoginPayload {
@@ -11,12 +12,18 @@ interface LoginPayload {
 }
 
 const state: AuthState = {
-  accessToken: ''
+  accessToken: '',
+  email: ''
 };
 
 const mutations = {
   setToken(state: AuthState, token: string): void {
     state.accessToken = token;
+    localStorage.setItem('token', token);
+  },
+  setEmail(state: AuthState, email: string): void {
+    state.email = email;
+    localStorage.setItem('email', email);
   }
 };
 
@@ -38,6 +45,7 @@ const actions = {
       
       const token = response.data.Data.AccessToken;
       commit('setToken', token);
+      commit('setEmail', email);
     } catch (error) {
       console.error('Login failed', error);
     }
@@ -47,6 +55,9 @@ const actions = {
 const getters = {
   token(state: AuthState): string {
     return state.accessToken;
+  },
+  email(state: AuthState): string {
+    return state.email;
   }
 };
 
