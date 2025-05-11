@@ -1,17 +1,17 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import LoginPage from '../pages/LoginPage.vue'
-import DashboardPage from '../pages/DashboardPage.vue'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import Login from '../pages/Login.vue';
+import Dashboard from '../pages/Dashboard.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: LoginPage
+    component: Login
   },
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: DashboardPage
+    component: Dashboard
   }
 ]
 

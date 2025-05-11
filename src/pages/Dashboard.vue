@@ -10,17 +10,21 @@ import { useStore } from 'vuex';
 import Chart from '@/components/Chart.vue';
 
 export default defineComponent({
-  name: 'DashboardPage',
-  components: {
-    Chart
-  },
+  name: 'Dashboard',
+  components: { Chart },
 
   setup() {
     const store = useStore();
 
     onMounted(async () => {
       await store.dispatch('user/fetchUserInfo');
-      await store.dispatch('sales/fetchSalesOverview', 30);
+
+      const sellerId = store.getters['user/sellerId'];
+      const marketplace = store.getters['user/marketplace'];
+
+      if (sellerId && marketplace) {
+        await store.dispatch('sales/fetchSalesData', 30);
+      }
     });
   }
 });
@@ -32,7 +36,7 @@ export default defineComponent({
   height: 100vh;
   background: url('@/assets/dashboard.jpg') no-repeat center center / cover;
   flex-direction: column;
-  gap: 2rem;
-  padding: 2rem;
+  gap: 1rem;
+  padding: 1rem;
 }
 </style>

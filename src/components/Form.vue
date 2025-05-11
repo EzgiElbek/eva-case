@@ -24,7 +24,7 @@
     {{ errorMessage }}
   </div>
   <button
-    class="loginButton"
+    class="login-button"
     :disabled="!formData.email || !formData.password || !isEmailValid || isLoading"
     @click="login"
   >
@@ -51,21 +51,13 @@ interface FormData {
 }
 
 export default {
-  name: 'LoginForm',
+  name: 'Form',
   setup() {
     const store = useStore();
     const router = useRouter();
 
     const form = reactive<FormItem[]>([
-      {
-          name: 'Email',
-          value: 'email',
-      },
-      {
-          name: 'Password',
-          value: 'password',
-
-      }
+      { name: 'Email', value: 'email' }, { name: 'Password', value: 'password'}
     ]);
 
     const formData = reactive<FormData>({ email: '', password: '' });
@@ -192,20 +184,19 @@ export default {
     }
   }
 
-  .loginButton {
+  .login-button {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 91%;
     padding: 15px;
-    font-size: 16px;
     background-color: #2d1251;
     font: normal 600 14px -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+    cursor: pointer;
     color: white;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
-    margin-left: 18px;
+    margin-left: 16px;
   }
 
   .spinner-icon {
@@ -214,7 +205,7 @@ export default {
       animation: fa-spin 0.8s infinite linear !important;
     }
 
-  .loginButton:disabled {
+  .login-button:disabled {
     cursor: not-allowed;
     opacity: 0.6;
   }
@@ -232,9 +223,8 @@ export default {
   .error-message {
     color: #ff5a5a;
     font: normal 500 12px / 10px -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
-    margin: -15px 0 0 23px;
+    margin: -7px 0 0 20px;
     text-align: left;
-    width: 90%;
   }
 
 </style>

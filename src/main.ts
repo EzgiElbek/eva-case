@@ -1,11 +1,17 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faEye, faEyeSlash, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
 import HighchartsVue from 'highcharts-vue';
 import Highcharts from 'highcharts'; 
+
+import PrimeVue from 'primevue/config';
+import 'primevue/resources/themes/lara-light-blue/theme.css';
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
 
 import router from './router';
 import store from './store';
@@ -27,12 +33,13 @@ Highcharts.setOptions({
     }
 });
 
-library.add(faEye, faEyeSlash);
+library.add(faEye, faEyeSlash, faChevronUp, faChevronDown);
 
 const app = createApp(App);
 
 app.use(router);
 app.use(store);
+app.use(PrimeVue);
 app.use(HighchartsVue); 
 app.component('font-awesome-icon', FontAwesomeIcon);
 

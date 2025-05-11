@@ -1,20 +1,18 @@
 <template>
   <div class="form-container">
     <div class="form-box">
-      <LoginForm></LoginForm>
+      <Form></Form>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import LoginForm from '@/components/LoginForm.vue';
+import Form from '@/components/Form.vue';
 
 export default defineComponent({
   name: 'HomeView',
-  components: {
-    LoginForm
-  }
+  components: { Form }
 });
 </script>
 
