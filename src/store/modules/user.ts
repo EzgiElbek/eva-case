@@ -6,10 +6,10 @@ interface UserState {
   sellerId: string;
 }
 
-const state: UserState = {
+const state = (): UserState => ({
   marketplace: '',
   sellerId: ''
-};
+});
 
 const mutations = {
   setUserInfo(state: UserState, payload: { marketplace: string; sellerId: string }) {
@@ -22,17 +22,21 @@ const actions = {
   async fetchUserInfo({ commit, rootGetters }: ActionContext<UserState, any>) {
     try {
       const token = rootGetters['auth/token'];
-      const email = rootGetters['auth/email']
-      const response = await axios.post('https://iapitest.eva.guru/user/user-information', {email: email},
-        { headers: {Authorization: `Bearer ${token}` } });
+      const email = rootGetters['auth/email'];
 
-      const data = response.data.Data;
-      commit('setUserInfo', {
-        marketplace: data.user.store[0].marketplaceName,
-        sellerId: data.user.store[0].storeId
-      });
+      const response = await axios.post('https://iapitest.eva.guru/user/user-information', { email }, { headers: { Authorization: `Bearer ${token}` } });
+
+      const store = response.data?.Data?.user?.store?.[0];
+      if (store) {
+        commit('setUserInfo', {
+          marketplace: store.marketplaceName,
+          sellerId: store.storeId
+        });
+      } else {
+        console.error('User store data is missing.');
+      }
     } catch (error) {
-      console.error('Failed to user information:', error);
+      console.error('Failed to fetch user information:', error);
     }
   }
 };

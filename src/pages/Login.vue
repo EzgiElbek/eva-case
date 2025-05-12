@@ -16,7 +16,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss"> 
+<style scoped lang="scss">
 .form-container {
   display: flex;
   flex-direction: column;
@@ -24,22 +24,22 @@ export default defineComponent({
   align-items: center;
   height: 100vh;
   gap: 20px;
-  background: url('@/assets/background.jpg') no-repeat center center / cover;
   padding: 1rem;
+  background: url('@/assets/login.jpg') no-repeat center center / cover;
 
   .form-box {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    width: 400px;
-    height: 400px;
+    width: 100%;
     max-width: 400px;
-    backdrop-filter: blur(10px);
-    background-color: rgb(228 200 255 / 25%);
+    height: 400px;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
+    backdrop-filter: blur(10px);
+    background-color: rgba(228, 200, 255, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     animation: fadeIn 1s ease-in-out forwards;
   }
 }

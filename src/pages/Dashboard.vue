@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <Chart/>
+    <Chart />
   </div>
 </template>
 
@@ -12,11 +12,11 @@ import Chart from '@/components/Chart.vue';
 export default defineComponent({
   name: 'Dashboard',
   components: { Chart },
-
   setup() {
     const store = useStore();
 
     onMounted(async () => {
+      store.commit('sales/setChartLoading', true);
       await store.dispatch('user/fetchUserInfo');
 
       const sellerId = store.getters['user/sellerId'];
@@ -25,6 +25,7 @@ export default defineComponent({
       if (sellerId && marketplace) {
         await store.dispatch('sales/fetchSalesData', 30);
       }
+      store.commit('sales/setChartLoading', false);
     });
   }
 });
@@ -33,10 +34,12 @@ export default defineComponent({
 <style scoped lang="scss">
 .dashboard-container {
   display: flex;
-  height: 100vh;
-  background: url('@/assets/dashboard.jpg') no-repeat center center / cover;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
+  min-height: 100vh;
+  padding: 2rem;
+  gap: 2rem;
+  background: url('@/assets/dashboard.jpg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 </style>

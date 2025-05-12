@@ -3,17 +3,17 @@
 </template>
 
 <script lang="ts">
-export default {
-  name: 'App'
-}
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'App',
+});
 </script>
 
 <style>
-#app {
-  height: 100vh;
-}
-body {
+html, body, #app {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 </style>

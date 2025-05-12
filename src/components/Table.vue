@@ -5,7 +5,7 @@
             <InputText v-model="filterText" placeholder="Search SKU..." class="search-input" />
         </div>
 
-        <DataTable :value="filteredData" :paginator="true" :rows="10" @page="onPageChange">
+        <DataTable :value="filteredData" :paginator="true" :rows="10" @page="onPageChange"  :first="currentPage * 10" :totalRecords="filteredData.length">
             <template #empty>
                 <div class="no-data">No matching data found.</div>
             </template>
@@ -80,16 +80,24 @@
         setup(props) {
             const store = useStore();
 
-            const currentPage = ref(1);
-            const totalRecords = ref(0);
             const filterText = ref('');
+            const currentPage = ref(0);
+
+            watch(filterText, () => {
+                currentPage.value = 0;
+            });
+
+            watch(() => [props.selectedFirstDate, props.selectedSecondDate], () => {
+                filterText.value = '';
+                currentPage.value = 0;
+            });
 
             const formatValue = (amount: number, qty: number): string => {
                 const avg = qty ? (amount / qty).toFixed(2) : '0.00';
                 return `$${amount?.toFixed(2) || '0.00'} / ${qty}<br><strong>$${avg}</strong>`;
             };
 
-            const getFormatIcon = (currentAmount: number, currentQty: number, prevAmount: number, prevQty: number): string | null => {
+            const getFormatIcon = (currentAmount: number, currentQty: number, prevAmount: number, prevQty: number) => {
                 const avg = currentQty ? currentAmount / currentQty : 0;
                 const prevAvg = prevQty ? prevAmount / prevQty : 0;
 
@@ -98,44 +106,29 @@
                 return null;
             };
 
-            const getHeader = (date: string): string => {
-                if (!date) return '';
-                return `${date}<br>Sales / Units<br>Avg. Selling Price`;
-            };
-
-            const formatRefund = (value: number): string => {
-                return `$${value?.toFixed(2) || '0.00'}`;
-            };
-
             const filteredData = computed(() =>
-                props.tableData.filter(item =>
-                item.sku.toLowerCase().includes(filterText.value.toLowerCase())
-                )
+                props.tableData.filter(item => item.sku.toLowerCase().includes(filterText.value.toLowerCase()))
             );
 
             const onPageChange = (event: any) => {
-                const newPage = event.page + 1;
-                currentPage.value = newPage;
+                currentPage.value = event.page;
 
-                store.dispatch('sales/fetchTableData', {
-                    firstDate: props.selectedFirstDate,
-                    secondDate: props.selectedSecondDate,
-                    pageNumber: Math.ceil(newPage / 3)
-                });
+                if (event.page % 3 === 0) {
+                    const pageNumber = Math.floor(event.page / 3);
+                    store.dispatch('sales/fetchTableData', {
+                        firstDate: props.selectedFirstDate,
+                        secondDate: props.selectedSecondDate,
+                        pageNumber
+                    });
+                }
             };
-
-            watch(() => [props.selectedFirstDate, props.selectedSecondDate], () => {
-                filterText.value = '';
-            });
 
             return {
                 formatValue,
                 getFormatIcon,
-                formatRefund,
-                getHeader,
                 onPageChange,
                 filteredData,
-                totalRecords,
+                currentPage,
                 faChevronUp,
                 faChevronDown,
                 faSearch,
@@ -152,7 +145,6 @@
     .table-header {
         text-align: left;
         font-weight: 600;
-        line-height: 1.4;
         white-space: pre-line;
     }
 
@@ -180,7 +172,6 @@
         display: flex;
         align-items: center;
         font-weight: 500;
-        line-height: 1.4;
         gap: 30px;
     }
 

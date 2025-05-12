@@ -11,17 +11,17 @@ interface LoginPayload {
   password: string;
 }
 
-const state: AuthState = {
+const state = (): AuthState => ({
   accessToken: '',
   email: ''
-};
+});
 
 const mutations = {
-  setToken(state: AuthState, token: string): void {
+  setToken(state: AuthState, token: string) {
     state.accessToken = token;
     localStorage.setItem('token', token);
   },
-  setEmail(state: AuthState, email: string): void {
+  setEmail(state: AuthState, email: string) {
     state.email = email;
     localStorage.setItem('email', email);
   }
@@ -47,18 +47,14 @@ const actions = {
       commit('setToken', token);
       commit('setEmail', email);
     } catch (error) {
-      console.error('Login failed', error);
+      console.error('Login failed:', error);
     }
   }
 };
 
 const getters = {
-  token(state: AuthState): string {
-    return state.accessToken;
-  },
-  email(state: AuthState): string {
-    return state.email;
-  }
+  token: (state: AuthState): string => state.accessToken,
+  email: (state: AuthState): string => state.email
 };
 
 export default {

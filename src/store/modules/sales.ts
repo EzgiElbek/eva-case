@@ -7,11 +7,11 @@ interface SalesState {
   isChartLoading: boolean;
 }
 
-const state: SalesState = {
+const state = (): SalesState => ({
   chartData: [],
   tableData: [],
   isChartLoading: false
-};
+});
 
 const mutations = {
   setChartData(state: SalesState, payload: any[]) {
@@ -38,15 +38,12 @@ const actions = {
         marketplace,
         sellerId,
         requestStatus: 0,
-        day: day,
+        day,
         excludeYoYData: true
       };
 
-      //Daily Sales Overview
-      const response = await axios.post('https://iapitest.eva.guru/data/daily-sales-overview', payload, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      commit('setChartData', response.data.Data.item);
+      const response = await axios.post('https://iapitest.eva.guru/data/daily-sales-overview', payload, { headers: { Authorization: `Bearer ${token}` } });
+      commit('setChartData', response.data?.Data?.item || []);
     } catch (error) {
       console.error('Failed to fetch sales:', error);
     } finally {
@@ -59,32 +56,32 @@ const actions = {
       const token = rootGetters['auth/token'];
       const sellerId = rootGetters['user/sellerId'];
       const marketplace = rootGetters['user/marketplace'];
-  
-      //Daily Sales Sku
-      const skuListResponse = await axios.post('https://iapitest.eva.guru/data/daily-sales-sku-list', {
-        isDaysCompare: secondDate ? 1 : 0,
-        marketplace,
-        sellerId,
-        salesDate: firstDate,
-        salesDate2: secondDate || "",
-        pageNumber: 1,
-        pageSize: 30
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-  
-      const skuList = skuListResponse.data.Data.item.skuList;
 
-      //Sku Refund Rate
-      const refundResponse = await axios.post('https://iapitest.eva.guru/data/get-sku-refund-rate', {
-        marketplace,
-        sellerId,
-        skuList: skuList.map((item: any) => item.sku)
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-  
-      const refundRates = refundResponse.data.Data;
+      const skuListResponse = await axios.post('https://iapitest.eva.guru/data/daily-sales-sku-list',
+        {
+          isDaysCompare: secondDate ? 1 : 0,
+          marketplace,
+          sellerId,
+          salesDate: firstDate,
+          salesDate2: secondDate || '',
+          pageNumber: 1,
+          pageSize: 30
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const skuList = skuListResponse.data?.Data?.item?.skuList || [];
+
+      const refundResponse = await axios.post('https://iapitest.eva.guru/data/get-sku-refund-rate',
+        {
+          marketplace,
+          sellerId,
+          skuList: skuList.map((item: any) => item.sku)
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const refundRates = refundResponse.data?.Data || [];
 
       const mergedList = skuList.map((item: any) => {
         const refund = refundRates.find((r: any) => r.sku === item.sku);
@@ -93,14 +90,12 @@ const actions = {
           refundRate: refund ? refund.refundRate : ''
         };
       });
-  
+
       commit('setTableData', mergedList);
     } catch (error) {
       console.error('Failed to fetch table data:', error);
     }
-  },
-
-
+  }
 };
 
 const getters = {
